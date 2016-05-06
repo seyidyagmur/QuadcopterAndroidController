@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 	IntentFilter filtre;
 	BroadcastReceiver receiver;
 	boolean isConnected = false;
+	boolean sabit = true;
 
 	Handler mHandler = new Handler() {
 		@Override
@@ -168,53 +169,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 			btn_ileri.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					try {
-						if(isConnected)
-							ileri();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-
-					}
-
-				}
-			});
-			btn_sag.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					try {
-						if(isConnected)
-						sag();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-
-					}
-
-				}
-			});
-			btn_sol.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-
-					try {
-						if(isConnected)
-						sol();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-
-					}
+					sabit = false;
 				}
 			});
 			btn_geri.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					try {
-						if(isConnected)
-						geri();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-
-					}
-
+					sabit = true;
 				}
 			});
 
@@ -301,6 +262,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 			ax = (int) x;
 			ay = (int) y;
 			az = (int) z;
+			System.out.println("sonuc: "+ay+" roll: "+az);
+
 		}
 	};
 
@@ -478,49 +441,36 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 	public void Acilar() throws IOException {
 		String yon = "";
 
-		int pitch = 0;
-		int roll = 0;
-		roll = Math.abs(ay);
-		pitch = Math.abs(az);
-		roll = roll > 30 ? 30 : roll;
-		roll = roll < -30 ? -30 : roll;
-		pitch = pitch > 30 ? 30 : pitch;
-		pitch = pitch < -30 ? -30 : pitch;
+		int pitch = az;
+		int roll = ay;
+
+		if(sabit){
+			pitch = 0;
+			roll = 0;
+		} else {
+			roll = roll > 30 ? 30 : roll;
+			roll = roll < -30 ? -30 : roll;
+			pitch = pitch > 30 ? 30 : pitch;
+			pitch = pitch < -30 ? -30 : pitch;
+		}
 
 		outstream.write(("p"+pitch+"\nr"+roll+"\n").getBytes());
 
 	}
 
-	public void ileri() throws IOException {
-		outstream.write("1".getBytes());
-	}
-
-	public void geri() throws IOException {
-		outstream.write("2".getBytes());
-	}
-
-	public void sag() throws IOException {
-		outstream.write("3".getBytes());
-	}
-
-	public void sol() throws IOException {
-		outstream.write("4".getBytes());
-	}
-
 	public void dur() throws IOException {
-		outstream.write("5".getBytes());
+		outstream.write("i5\n".getBytes());
 	}
 
 	public void basla() throws IOException {
-		//outstream.write("6".getBytes());
-		outstream.write("63.75".getBytes());
+ 		outstream.write("i6\n".getBytes());
 	}
 
 	public void baglan() throws IOException {
-		outstream.write("7".getBytes());
+		outstream.write("i7\n".getBytes());
 	}
 
 	public void alcal() throws IOException {
-		outstream.write("8".getBytes());
+		outstream.write("i8\n".getBytes());
 	}
 }
